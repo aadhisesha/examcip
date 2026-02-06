@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { QuestionProvider } from './QuestionContext';
+import QuestionDashboard from './QuestionDashboard';
 
 function App() {
   const [file, setFile] = useState(null);
   const [extractedText, setExtractedText] = useState('');
   const [processedText, setProcessedText] = useState('');
+  const [activeTab, setActiveTab] = useState('ocr'); // 'ocr' or 'questions'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -110,13 +113,22 @@ function App() {
   };
 
   return (
+    <QuestionProvider>
     <div className="container">
       <header className="header">
         <h1>AI-Assisted Exam Evaluator</h1>
         <p>Upload exam answer sheets for OCR and preprocessing</p>
+        <div style={{ marginTop: 8 }}>
+          <button onClick={() => setActiveTab('ocr')} style={{ marginRight: 8, fontWeight: activeTab === 'ocr' ? '700' : '400' }}>OCR</button>
+          <button onClick={() => setActiveTab('questions')} style={{ fontWeight: activeTab === 'questions' ? '700' : '400' }}>Question Management Dashboard</button>
+        </div>
       </header>
 
       <main className="main">
+        {activeTab === 'questions' ? (
+          <QuestionDashboard />
+        ) : (
+          <>
         <section className="upload-section">
           <form onSubmit={handleUpload}>
             <div className="file-input-wrapper">
@@ -143,35 +155,38 @@ function App() {
           </form>
 
           {error && <div className="error-message">{error}</div>}
-        </section>
+          </section>
 
-        <section className="results-section">
-          <div className="text-area-wrapper">
-            <label htmlFor="extracted">Extracted Text (Puter AI Chat)</label>
-            <textarea
-              id="extracted"
-              value={extractedText}
-              readOnly
-              placeholder="OCR extracted text will appear here..."
-            />
-          </div>
+          <section className="results-section">
+            <div className="text-area-wrapper">
+              <label htmlFor="extracted">Extracted Text (Puter AI Chat)</label>
+              <textarea
+                id="extracted"
+                value={extractedText}
+                readOnly
+                placeholder="OCR extracted text will appear here..."
+              />
+            </div>
 
-          <div className="text-area-wrapper">
-            <label htmlFor="processed">Preprocessed Text</label>
-            <textarea
-              id="processed"
-              value={processedText}
-              readOnly
-              placeholder="Cleaned and preprocessed text will appear here..."
-            />
-          </div>
-        </section>
+            <div className="text-area-wrapper">
+              <label htmlFor="processed">Preprocessed Text</label>
+              <textarea
+                id="processed"
+                value={processedText}
+                readOnly
+                placeholder="Cleaned and preprocessed text will appear here..."
+              />
+            </div>
+          </section>
+          </>
+        )}
       </main>
 
       <footer className="footer">
         <p>Phase: Upload → Puter Chat GPT-5 nano → Text Preprocessing | Ready for subjective evaluation</p>
       </footer>
     </div>
+    </QuestionProvider>
   );
 }
 
