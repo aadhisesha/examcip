@@ -24,6 +24,7 @@ exam_eval/
 
 - **Frontend**: React (functional components, hooks)
 - **Backend**: Python FastAPI
+- **Database**: MongoDB (questions, evaluations, feedback)
 - **OCR**: Puter AI (img2txt)
 - **NLP**: NLTK for text preprocessing
 
@@ -62,7 +63,13 @@ exam_eval/
    - Get API key from https://puter.com
    - Update `PUTER_API_KEY` in `main.py` line 25
 
-5. Run the server:
+5. Configure MongoDB:
+   - Start MongoDB locally (default: `mongodb://localhost:27017`)
+   - Optional env vars:
+     - `MONGODB_URI` (example: `mongodb://localhost:27017`)
+     - `MONGODB_DB` (default: `examcip`)
+
+6. Run the server:
    ```bash
    python main.py
    ```
@@ -139,6 +146,7 @@ Output is ready for subjective evaluation in future phases.
 - Puter API key required for production OCR (demo mode returns placeholder text)
 - PDF support requires additional pdf2image conversion
 - CORS enabled for local development
+- Questions, evaluation results, and feedback are persisted in MongoDB
 - No ML-based evaluation in this version
 - Future phases will add: TF-IDF, cosine similarity, and automated grading
 

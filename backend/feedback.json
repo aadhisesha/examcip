@@ -1,0 +1,35 @@
+[
+  {
+    "questionNumber": "1",
+    "questionType": "creative",
+    "uploadId": 1773339542745,
+    "previousMarks": 5,
+    "correctedMarks": 1,
+    "maxMarks": 5,
+    "justification": "The answer provides an accurate and concise definition of a computer virus as malware that infects a system, attaches to legitimate files or programs, and propagates to other systems via sharing or execution. It covers the core features: infection, host attachment, and spread.",
+    "extractedText": "A computer Virus is a type of malicious software (malware) that is designed to infect a computer system, attach itself to legitimate Files or programs and spread from one system to another when those Files are shared or executed.",
+    "timestamp": 1773339563.0478425
+  },
+  {
+    "questionNumber": "1",
+    "questionType": "creative",
+    "uploadId": 1773339542745,
+    "previousMarks": 1,
+    "correctedMarks": 4,
+    "maxMarks": 5,
+    "justification": "The answer provides an accurate and concise definition of a computer virus as malware that infects a system, attaches to legitimate files or programs, and propagates to other systems via sharing or execution. It covers the core features: infection, host attachment, and spread.",
+    "extractedText": "A computer Virus is a type of malicious software (malware) that is designed to infect a computer system, attach itself to legitimate Files or programs and spread from one system to another when those Files are shared or executed.",
+    "timestamp": 1773339567.5877192
+  },
+  {
+    "questionNumber": "1",
+    "questionType": "subjective",
+    "uploadId": 1773340017572,
+    "previousMarks": 4.7,
+    "correctedMarks": 2,
+    "maxMarks": 5,
+    "justification": "The answer has strong overlap with the key answer and good concept coverage. Covered concepts: higher, names live, mount glory, names.",
+    "extractedText": "Higher, higher, Will We Climb, Up the Mount of Glory, That our Names may live Through",
+    "timestamp": 1773340026.3070705
+  }
+]

@@ -1,33 +1,27 @@
 import React, { createContext, useEffect, useState } from 'react';
-
-// LocalStorage key
-const STORAGE_KEY = 'exam_questions_v1';
+import { buildApiUrl } from './config';
 
 export const QuestionContext = createContext(null);
 
 export function QuestionProvider({ children }) {
   const [questions, setQuestions] = useState([]);
 
-  // Load from localStorage on mount
+  // Load from backend (MongoDB) on mount
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setQuestions(JSON.parse(raw));
-    } catch (e) {
-      console.error('Failed to load questions from storage', e);
-    }
+    (async () => {
+      try {
+        const response = await fetch(buildApiUrl('/questions'));
+        const data = await response.json();
+        if (response.ok && data.status === 'ok' && Array.isArray(data.questions)) {
+          setQuestions(data.questions);
+        }
+      } catch (e) {
+        console.error('Failed to load questions from backend', e);
+      }
+    })();
   }, []);
 
-  // Persist on change
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(questions));
-    } catch (e) {
-      console.error('Failed to save questions to storage', e);
-    }
-  }, [questions]);
-
-  const addOrUpdateQuestion = (q) => {
+  const addOrUpdateQuestion = async (q) => {
     setQuestions((prev) => {
       const idx = prev.findIndex((p) => p.questionNumber === q.questionNumber);
       if (idx >= 0) {
@@ -37,10 +31,28 @@ export function QuestionProvider({ children }) {
       }
       return [...prev, q];
     });
+
+    try {
+      await fetch(buildApiUrl('/questions'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(q),
+      });
+    } catch (e) {
+      console.error('Failed to save question to backend', e);
+    }
   };
 
-  const deleteQuestion = (questionNumber) => {
+  const deleteQuestion = async (questionNumber) => {
     setQuestions((prev) => prev.filter((q) => q.questionNumber !== questionNumber));
+
+    try {
+      await fetch(buildApiUrl(`/questions/${encodeURIComponent(questionNumber)}`), {
+        method: 'DELETE',
+      });
+    } catch (e) {
+      console.error('Failed to delete question from backend', e);
+    }
   };
 
   const getQuestion = (questionNumber) => {

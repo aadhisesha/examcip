@@ -7,6 +7,7 @@ export default function QuestionDashboard() {
   const [qn, setQn] = useState('');
   const [qText, setQText] = useState('');
   const [qType, setQType] = useState('subjective');
+  const [maxMarks, setMaxMarks] = useState('');
   const [answerKey, setAnswerKey] = useState('');
   const [rubrics, setRubrics] = useState([]);
 
@@ -37,6 +38,7 @@ export default function QuestionDashboard() {
       questionType: qType,
       questionText: qText,
       answerKey: qType === 'subjective' ? answerKey : '',
+      maxMarks: qType === 'subjective' ? (parseFloat(maxMarks) || 10) : undefined,
       rubrics: qType === 'creative' ? rubrics : [],
       // per-question storage for OCR and uploads (backend-ready)
       ocrText: '',
@@ -48,20 +50,20 @@ export default function QuestionDashboard() {
   };
 
   return (
-    <div style={{ padding: 16 }}>
-      <h2>Question Management Dashboard</h2>
-      <form onSubmit={handleSave} style={{ marginBottom: 16 }}>
-        <div style={{ marginBottom: 8 }}>
+    <div className="panel-card">
+      <h2 className="panel-title">Question Management Dashboard</h2>
+      <form onSubmit={handleSave} className="dashboard-form">
+        <div className="field-row">
           <label>Question Number (e.g. Q1)</label>
           <input value={qn} onChange={(e) => setQn(e.target.value)} required />
         </div>
 
-        <div style={{ marginBottom: 8 }}>
+        <div className="field-row">
           <label>Question Text</label>
           <textarea value={qText} onChange={(e) => setQText(e.target.value)} required />
         </div>
 
-        <div style={{ marginBottom: 8 }}>
+        <div className="field-row">
           <label>Question Type</label>
           <select value={qType} onChange={(e) => setQType(e.target.value)}>
             <option value="subjective">Subjective</option>
@@ -69,40 +71,47 @@ export default function QuestionDashboard() {
           </select>
         </div>
 
+        {qType === 'subjective' && (
+          <div className="field-row">
+            <label>Max Marks</label>
+            <input value={maxMarks} onChange={(e) => setMaxMarks(e.target.value)} placeholder="e.g. 10" />
+          </div>
+        )}
+
         {qType === 'subjective' ? (
-          <div style={{ marginBottom: 8 }}>
+          <div className="field-row">
             <label>Answer Key (paragraph)</label>
             <textarea value={answerKey} onChange={(e) => setAnswerKey(e.target.value)} />
           </div>
         ) : (
-          <div style={{ marginBottom: 8 }}>
+          <div className="field-row">
             <label>Rubrics</label>
             {rubrics.map((r, i) => (
-              <div key={i} style={{ border: '1px solid #ddd', padding: 8, marginBottom: 8 }}>
+              <div key={i} className="rubric-card">
                 <input placeholder="Criterion name" value={r.name} onChange={(e) => updateRubric(i, 'name', e.target.value)} />
                 <textarea placeholder="Description" value={r.description} onChange={(e) => updateRubric(i, 'description', e.target.value)} />
                 <input placeholder="Marks" value={r.marks} onChange={(e) => updateRubric(i, 'marks', e.target.value)} />
-                <button type="button" onClick={() => removeRubric(i)}>Remove</button>
+                <button className="danger-btn" type="button" onClick={() => removeRubric(i)}>Remove</button>
               </div>
             ))}
             <button type="button" onClick={handleAddRubric}>Add Rubric</button>
           </div>
         )}
 
-        <div>
+        <div className="field-row">
           <button type="submit">Save Question</button>
         </div>
       </form>
 
-      <h3>Existing Questions</h3>
-      <div>
-        {questions.length === 0 && <div>No questions defined yet.</div>}
+      <h3 className="section-title">Existing Questions</h3>
+      <div className="question-list">
+        {questions.length === 0 && <div className="empty-state">No questions defined yet.</div>}
         {questions.map((q) => (
-          <div key={q.questionNumber} style={{ border: '1px solid #eee', padding: 8, marginBottom: 8 }}>
+          <div key={q.questionNumber} className="question-item">
             <strong>{q.questionNumber}</strong> — {q.questionType}
-            <div>{q.questionText}</div>
-            <div style={{ marginTop: 8 }}>
-              <button onClick={() => deleteQuestion(q.questionNumber)}>Delete</button>
+            <div className="question-text">{q.questionText}</div>
+            <div className="question-actions">
+              <button className="danger-btn" onClick={() => deleteQuestion(q.questionNumber)}>Delete</button>
             </div>
           </div>
         ))}
